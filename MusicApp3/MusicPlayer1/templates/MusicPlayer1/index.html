@@ -1,0 +1,136 @@
+{% extends 'MusicPlayer1/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ==" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="{% static 'MusicPlayer1/css/style.css' %}">
+    <!-- <script src="{% static 'MusicPlayer1/js/script.js' %}"></script> -->
+    
+    <title>Music</title>
+</head>
+<body>
+
+    <div class="main_div">
+        <div class="music_container">
+            <h1 id="title">Girls Like That</h1>
+            <h3 id="artist">Maroon 5</h3>
+            <div class="img_container">
+                <img id="musicImg" src="{% static 'MusicPlayer1/images/GirlsLikeYou.PNG' %}" alt="music1">
+            </div>
+
+            <audio src="{% static 'MusicPlayer1/music/GirlsLikeYou.mp3' %}"></audio>
+
+            <!-- conrols -->
+            <div class="music_controls">
+                
+                <i class="fas fa-backward" id="prev" title="Previous"></i>
+                <i class="fas fa-music main_button" id="play" title="Play"></i>
+                <!-- <i class="fas fa-play main_button" id="loop" title="Loop"></i> -->
+                <i class="fas fa-forward" id="next" title="Next"></i>
+                
+
+            </div>
+
+            
+        </div>
+    </div>
+
+    <script>
+        const play = document.getElementById('play')
+        /* const pause = document.getElementById('stop') */
+        const music = document.querySelector('audio')
+        const loop = document.querySelector("loop")
+        const img = document.getElementById("musicImg")
+        const prev = document.getElementById("prev")
+        const next = document.getElementById("next")
+        const artist = document.getElementById("artist")
+        const title = document.getElementById("title")
+
+
+
+
+        play.addEventListener('click',()=>{
+            if (music.paused){
+                music.play()
+                play.classList.replace("fa-music","fa-pause")
+                img.classList.add('anime')
+            }else{
+                music.pause()
+                play.classList.replace("fa-pause","fa-music")
+                img.classList.remove('anime')
+            }
+        })
+
+        /*                 function Loop(){
+            music.loop = false
+            music.load()
+        }
+
+        loop.addEventListener('click',()=>{
+            if(Loop){
+                music.loop = true
+                music.load()
+                play.classList.replace("fa-play","fa-backward")
+            }else{
+                music.loop = false
+                music.load()
+            }
+        })
+        */
+        const songs = [
+            {
+                name: "GirlsLikeYou",
+                title: "GirlsLikeYou",
+                artist: "Maroon 5",
+            },
+            {
+                name: "Scam1992",
+                title: "Scam1992",
+                artist: "Bjjs",
+            },
+            {
+                name: "Villain",
+                title: "Darkness",
+                artist: "Heart of Darkness",
+            },
+        ]
+
+        const LoadSongs = (songs) => {
+            title.textContent = songs.title;
+            artist.textContent = songs.artist;
+            music.src = `/static/MusicPlayer1/music/${songs.name}.mp3`;
+            img.src =  `/static/MusicPlayer1/images/${songs.name}.PNG`;
+        }
+
+        /* LoadSongs(songs[1]); */
+        songIndex = 0
+        const nextSong = () =>{
+            songIndex = (songIndex+1) % songs.length;
+            LoadSongs(songs[songIndex])
+            music.play()
+        }
+
+        const prevSong = () =>{
+            songIndex = (songIndex-1+songs.length) % songs.length;
+            LoadSongs(songs[songIndex])
+            music.play()
+        }
+
+
+
+        next.addEventListener('click',nextSong)
+        prev.addEventListener('click',prevSong)
+
+        /* 
+        pause.addEventListener('click',()=>{
+            music.pause()
+        }) */
+    </script>
+    
+</body>
+{% endblock content %}
